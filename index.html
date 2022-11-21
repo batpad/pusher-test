@@ -1,0 +1,47 @@
+
+
+<!DOCTYPE html>
+<head>
+  <title>Pusher Test</title>
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+  <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+  <script>
+
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('17ce2cc9bde1e534370e', {
+      cluster: 'ap2',
+      channelAuthorization: { endpoint: "http://localhost:5000/pusher/auth"}
+    });
+
+    var channel = pusher.subscribe('presence-channel');
+    channel.bind('chat', function(data) {
+      const $div = $('<div >').text(data).appendTo('#chat');
+    });
+
+    $(document).ready(function() {
+        $('#sendchat').click(function() {
+            
+            const txt = $('#chattxt').val();
+            const user = $('#username').val();
+            // pusher.trigger('presence-channel', chat, txt);
+            $.post('http://localhost:5000/chat', {
+                'user': $('#username').val(),
+                'msg': txt
+            });
+        });
+    });
+  </script>
+</head>
+<body>
+  <h1>Pusher Test</h1>
+  <p>
+    Make sure you have the server component started and try sending a message, and seeing it another tab / browser.
+  </p>
+  <div id="chat" /> <br />
+  <input id="username" placeholder="username" /> <br />
+  <textarea id="chattxt" placeholder="Message"></textarea> <br />
+  <button id="sendchat">Send</button>
+</body>
+
