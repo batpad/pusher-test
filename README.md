@@ -1,5 +1,7 @@
 ### Basic test of Pusher API
 
+First, replace the values in index.js with your Pusher Keys.
+
 ### Start backend:
 
 `npm install`
